@@ -9,8 +9,8 @@ const FlagButton = () => {
         <>
             <Button
                 style={{
-                    backgroundColor: theme.background,
-                    color: theme.foreground
+                    color: theme.foreground,
+                    marginLeft: theme.marginLeft
                 }}
             >
                 Flags
