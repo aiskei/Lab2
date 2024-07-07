@@ -1,25 +1,15 @@
 import { useEffect, useState } from 'react'
 import Container from '@mui/material/Container'
-import ImageList from '@mui/material/ImageList'
-import ImageListItem from '@mui/material/ImageListItem'
-import ImageListItemBar from '@mui/material/ImageListItemBar'
+import { CardMedia } from '@mui/material'
+import { CardContent } from '@mui/material'
 import { Typography } from '@mui/material'
+import { Card } from '@mui/material'
+import { Grid } from '@mui/material'
 
 const CountriesFlags = () => {
     const [data, setData] = useState([])
-    const [showAlt, setShowAlt] = useState(false)
 
-    const handleClick = () => {
-        // for (let i = 0 ; i < data.length; i++) {
-        //     console.log(data[i].flags)
-        // }
-        setShowAlt(!showAlt)
-        console.log(showAlt)
-        //console.log('Card is clicked')
-    }
-
-    //get data
-
+    //fetch data using useEffect hook
     useEffect(() => {
         fetch('https://restcountries.com/v3.1/all')
             .then((res) => {
@@ -27,57 +17,58 @@ const CountriesFlags = () => {
             })
             .then((data) => {
                 setData(data)
-                //console.log(data)
             })
     }, [])
 
     return (
-        <>
-            <Container>
-                <ImageList
-                    sx={{
-                        boxShadow: 1,
-                        borderRadius: 2,
-                        p: 8,
-                        minWidth: 100
-                    }}
-                    variant="masonry"
-                    cols={4}
-                    gap={8}
-                >
-                    {data.map((item, index) => (
-                        <>
-                            <ImageListItem
-                                onClick={() => handleClick()}
-                                sx={{
-                                    bgcolor: 'background.paper',
-                                    boxShadow: 1,
-                                    borderRadius: 2,
-                                    p: 6,
-                                    minWidth: 100
-                                }}
-                                key={index}
-                            >
+        <Container>
+            <>
+                <Grid container m={3}>
+                    {data.map(function (item, index) {
+                        return (
+                         <Grid key={index} item xs={12} md={6} lg={4} >
+                               <Card sx={{ maxWidth: 345, boxShadow: 1,
+                                    borderRadius: 2, m:2}}>
 
-                                <img src={item.flags.svg} loading="lazy" />
-                                        {showAlt === true && (
+                                <CardMedia
+                                    sx={{ height: 140}}
+                                    image={item.flags.svg}
+                                    title="green iguana"
+                                />
+                                <CardContent>
                                     <Typography
+                                        gutterBottom
+                                        variant="h5"
+                                        component="div"
                                     >
-                                        {item.flags.alt}
+                                        {item.name.common}
                                     </Typography>
-                                )}
-
-
-                            </ImageListItem>
-                            <ImageListItemBar
-                                subtitle={<span>{item.name.common}</span>}
-                                position="below"
-                            />
-                        </>
-                    ))}
-                </ImageList>
-            </Container>
-        </>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                    >
+                                        {`Population: ${item.population}`}
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                    >
+                                        {`Region: ${item.region}`}
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                    >
+                                        {`Capital: ${item.capital}`}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                         </Grid>
+                        )
+                    })}
+                </Grid>
+            </>
+        </Container>
     )
 }
 
